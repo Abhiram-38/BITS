@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int fun(int i,vector<int>& st, vector<int>& et, vector<int>&p,vector<int>&dp)
+    {
+        if(i>=(st.size()))return 0;
+        if(dp[i]!=-1)return dp[i];
+        //pick
+        int x=lower_bound(st.begin(),st.end(),et[i])-st.begin();
+        int t1=p[i]+fun(x,st,et,p,dp);
+        
+        //not pick
+        int t2=fun(i+1,st,et,p,dp);
+
+        return dp[i]=max(t1,t2);
+    }
+    int jobScheduling(vector<int>& st, vector<int>& et, vector<int>& p) {
+        vector<vector<int>>ve;
+        for(int i=0;i<st.size();i++){
+            ve.push_back({st[i],et[i],p[i]});
+        }
+        sort(ve.begin(),ve.end());
+        int i=0;
+        for(auto it:ve){
+            st[i]=it[0];
+            et[i]=it[1];
+            p[i]=it[2];
+            i++;
+        }
+        vector<int>dp(st.size(),-1);
+        return fun(0,st,et,p,dp);
+    }
+};
